@@ -18,30 +18,8 @@ function Book(title, author, pages, read, dataIndex) {
   };
 }
 
-let myLibrary = [
-  {
-    title: "Kafka",
-    author: "Haruki Murakami",
-    pages: "250",
-    read: true,
-    dataIndex: Math.floor(Math.random() * (999999 - 1) + 1),
-  },
-  {
-    title: "Harry Potter",
-    author: "JK Rowling",
-    pages: "500",
-    read: true,
-    dataIndex: Math.floor(Math.random() * (999999 - 1) + 1),
-  },
-];
-
-let libraryStorage = localStorage.setItem("library", JSON.stringify(myLibrary));
-
-function updateLocalLibrary() {
-  localStorage.setItem("library", JSON.stringify(myLibrary));
-}
-
 function addBook(event) {
+  let parsed = JSON.parse(localStorage.getItem("library"));
   event.preventDefault();
 
   //create new Book object form values
@@ -54,8 +32,8 @@ function addBook(event) {
   );
 
   //add to library array
-  myLibrary.push(addedBook);
-  localStorage.setItem("library", JSON.stringify(myLibrary));
+  parsed.push(addedBook);
+  localStorage.setItem("library", JSON.stringify(parsed));
 
   //always call display function to update UI
   displayBooks();
@@ -81,14 +59,15 @@ function displayBooks() {
 }
 
 function toggleRead(e) {
+  let parsed = JSON.parse(localStorage.getItem("library"));
+
   //find index of book with button clicked
-  bookIndex = myLibrary.findIndex((book) => book.dataIndex == e);
+  bookIndex = parsed.findIndex((book) => book.dataIndex == parseInt(e));
 
   //set boolean of read to opposite
-  myLibrary[bookIndex].read = !myLibrary[bookIndex].read;
+  parsed[bookIndex].read = !parsed[bookIndex].read;
 
-  updateLocalLibrary();
-
+  localStorage.setItem("library", JSON.stringify(parsed));
   //render the list of books again to update the read value
   displayBooks();
 }
@@ -104,10 +83,12 @@ function displayForm() {
 }
 
 function deleteBook(e) {
-  //update the library array and filter out the book which index matches the button
-  myLibrary = myLibrary.filter((book) => book.dataIndex !== parseInt(e));
+  let parsed = JSON.parse(localStorage.getItem("library"));
 
-  updateLocalLibrary();
+  //update the library array and filter out the book which index matches the button
+  parsed = parsed.filter((book) => book.dataIndex !== parseInt(e));
+
+  localStorage.setItem("library", JSON.stringify(parsed));
   displayBooks();
 }
 displayBooks();
