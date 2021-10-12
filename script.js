@@ -35,6 +35,12 @@ let myLibrary = [
   },
 ];
 
+let libraryStorage = localStorage.setItem("library", JSON.stringify(myLibrary));
+
+function updateLocalLibrary() {
+  localStorage.setItem("library", JSON.stringify(myLibrary));
+}
+
 function addBook(event) {
   event.preventDefault();
 
@@ -49,6 +55,7 @@ function addBook(event) {
 
   //add to library array
   myLibrary.push(addedBook);
+  localStorage.setItem("library", JSON.stringify(myLibrary));
 
   //always call display function to update UI
   displayBooks();
@@ -56,7 +63,7 @@ function addBook(event) {
 
 function displayBooks() {
   booksDiv.innerHTML = "";
-  for (let book of myLibrary) {
+  for (let book of JSON.parse(localStorage.getItem("library"))) {
     //conditional check of read status to update button text
     let buttonReadText = book.read === true ? "Mark Not Read" : "Mark Read";
     let bookListItem = document.createElement("div");
@@ -80,6 +87,8 @@ function toggleRead(e) {
   //set boolean of read to opposite
   myLibrary[bookIndex].read = !myLibrary[bookIndex].read;
 
+  updateLocalLibrary();
+
   //render the list of books again to update the read value
   displayBooks();
 }
@@ -97,6 +106,8 @@ function displayForm() {
 function deleteBook(e) {
   //update the library array and filter out the book which index matches the button
   myLibrary = myLibrary.filter((book) => book.dataIndex !== parseInt(e));
+
+  updateLocalLibrary();
   displayBooks();
 }
 displayBooks();
