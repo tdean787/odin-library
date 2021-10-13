@@ -6,16 +6,18 @@ let read = document.querySelector("#read");
 let addBookForm = document.querySelector("#addBookForm");
 let bookFormControl = document.querySelector("#bookFormControl");
 
-function Book(title, author, pages, read, dataIndex) {
-  this.title = title;
-  this.author = author;
-  this.pages = pages;
-  this.read = read;
-  this.dataIndex = dataIndex;
+class Book {
+  constructor(title, author, pages, read, dataIndex) {
+    this.title = title;
+    this.author = author;
+    this.pages = pages;
+    this.read = read;
+    this.dataIndex = dataIndex;
+  }
 
-  this.info = function () {
+  info() {
     return `${title} by ${author} has ${pages} pages, ${read}`;
-  };
+  }
 }
 
 function addBook(event) {
